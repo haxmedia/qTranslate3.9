@@ -284,13 +284,11 @@ function qtrans_initJS() {
 // function fixed by HAXMEDIA.PL
 		qtrans_hook_on_tinyMCE = function(id) {
 			tinyMCEPreInit.mceInit[id].setup = function(ed) {
-				ed.onSaveContent.add(function(ed, o) {
-					if (!ed.isHidden())  {
-						qtrans_save(switchEditors.pre_wpautop(o.content));
-					}
+				// fix save content
+				ed.on('SaveContent',function(e) {
+					qtrans_save(switchEditors.pre_wpautop(e.content));
 				});
 			};
-			
 			ed = new tinymce.Editor(id, tinyMCEPreInit.mceInit[id], tinymce.EditorManager);
 			ed.render();
 		}
