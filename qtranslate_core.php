@@ -454,15 +454,19 @@ function qtrans_strftime($format, $date, $default = '', $before = '', $after = '
 	$format = preg_replace($search,$replace,$format);
 	return strftime($format, $date).$after;
 }
-/*
-function qtrans_dateFromPostForCurrentLanguage($old_date, $format ='', $before = '', $after = '') {
-	global $post;
-	return qtrans_strftime(qtrans_convertDateFormat($format), mysql2date('U',$post->post_date), $old_date, $before, $after);
-}
-*/
-function qtrans_dateFromPostForCurrentLanguage($old_date, $format ='') {
-	global $post;
-	return qtrans_strftime(qtrans_convertDateFormat($format), mysql2date('U',$post->post_date), $old_date);
+
+/**
+ * Filter the date a post was published.
+ *
+ * @param	string		$the_date	The formatted date.
+ * @param	string		$format		Optional. PHP date format defaults to the date_format option if not specified.
+ * @param	int|WP_Post	$post		Optional. Post ID or WP_Post object. Default current post.
+ *
+ * @return	string	Date the current post was written.
+ */
+function qtrans_dateFromPostForCurrentLanguage($the_date, $format ='', $post = null) {
+	$post = get_post( $post );
+	return qtrans_strftime(qtrans_convertDateFormat($format), mysql2date('U', $post->post_date), $the_date, $before, $after);
 }
 
 function qtrans_dateModifiedFromPostForCurrentLanguage($old_date, $format ='') {
